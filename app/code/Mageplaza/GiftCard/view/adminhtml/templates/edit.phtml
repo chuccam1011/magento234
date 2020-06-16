@@ -1,0 +1,66 @@
+<script !src="">
+
+    require([
+        "jquery",
+        "Magento_Catalog/catalog/type-events",
+        "underscore",
+        "mage/mage",
+        "mage/backend/tabs",
+        "domReady!"
+    ], function($, TypeSwitcher){
+        var $form = $('[data-form=edit-product]');
+        $form.data('typeSwitcher', TypeSwitcher.init());
+
+        var scriptTagManager = (function($) {
+            var hiddenPrefix = 'hidden',
+                scriptTypeRegExp = /((java|ecma)script)/gi,
+                hiddenScriptType = 'text/' + hiddenPrefix + 'javascript',
+                changeScriptsType = function(source, callback) {
+                    var isString = (typeof source === 'string'),
+                        div = document.createElement('div'),
+                        scripts,
+                        scriptsLength;
+                    div.innerHTML = isString ? source : $(source).clone().wrap('<p>').parent().html();
+                    scripts = div.getElementsByTagName('script');
+                    scriptsLength = scripts.length;
+                    for (var i = 0; i < scriptsLength; i++) {
+                        scripts[i].type = callback(scripts[i].type);
+                    }
+                    return isString ? div.innerHTML : $(div.innerHTML);
+                },
+                disableScripts = function(source) {
+                    enableScripts(source);
+                    return changeScriptsType(source, function(type) {
+                        return type ? type.replace(scriptTypeRegExp, hiddenPrefix + '$1') : hiddenScriptType;
+                    });
+                },
+                enableScripts = function(source) {
+                    return changeScriptsType(source, function(type) {
+                        return type.replace(hiddenPrefix, '');
+                    });
+                };
+            return {
+                'disableScripts' : disableScripts,
+                'enableScripts' : enableScripts
+            }
+        })($);
+
+        $('#meta_description').on('change keyup paste', function () {
+            var maxLength = $(this).data('maxLength') || 255;
+            if ($(this).val().length >= maxLength) {
+                $(this).val($(this).val().substr(0, maxLength));
+            }
+        });
+        $form.mage('form', {
+            handlersData: {
+                save: {},
+                saveAndContinueEdit: {
+                    action: {
+                        args: {back: 'edit'}
+    }
+    }
+    });
+
+
+
+</script>

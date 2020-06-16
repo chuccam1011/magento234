@@ -1,0 +1,61 @@
+<?php
+// Add Some Code Here for design
+?>
+<legend class="legend"><span><?= $block->escapeHtml(__('GiftCard Information')) ?></span></legend><br>
+<fieldset class="fieldset ">
+    <h2><strong>Balance</strong></h2>
+    <p>
+        <?php
+        echo $block->getBalance();
+        ?>
+    </p>
+</fieldset>
+
+<fieldset class="fieldset ">
+    <?php if ($block->getRedemStatus() == 1) : ?>
+        <div class=""><strong>Redeem</strong></div>
+        <form action="" method="post">
+            <input class="input-text" type="text" name="code" id="" placeholder="Enter your gift code">
+            <button type="submit" name="giftcode" class="action primary"
+                    title="<?= $block->escapeHtmlAttr(__('Redeem')) ?>">
+                <span><?= $block->escapeHtml(__('Redeem')) ?></span></button>
+        </form>
+    <?php endif; ?>
+</fieldset>
+<br>
+<legend class="legend"><span><?= $block->escapeHtml(__('History')) ?></span></legend><br>
+<?php
+$giftcard_hiss = $block->getHistoryCollection();
+
+?>
+
+<?php if ($giftcard_hiss && count($giftcard_hiss)) : ?>
+    <div class="table-wrapper orders-history">
+        <table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption"><?= $block->escapeHtml(__('Orders')) ?></caption>
+            <thead>
+            <tr>
+                <th scope="col" class="col date"><?= $block->escapeHtml(__('Date')) ?></th>
+                <th scope="col" class="col "><?= $block->escapeHtml(__('Code')) ?></th>
+                <th scope="col" class="col "><?= $block->escapeHtml(__('Amount')) ?></th>
+                <th scope="col" class="col actions"><?= $block->escapeHtml(__('Action')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($giftcard_hiss as $giftcard_his) : ?>
+                <tr>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Date')) ?>"
+                        class="col date"><?= $block->format($giftcard_his['action_time']) ?></td>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Code')) ?>"
+                        class="col"><?= $giftcard_his->getCode($giftcard_his['giftcard_id']); ?></td>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Amount')) ?>"
+                        class="col total"><?= $block->formatCurency($giftcard_his['amount']) ?></td>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Action')) ?>"
+                        class="col actions"><?= $giftcard_his['action'] ?></td>
+
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,137 @@
+<?php
+
+
+namespace Mageplaza\GiftCard\Plugin;
+
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\Controller\ResultFactory;
+
+class ApplyGiftCard extends Action
+
+{
+    protected $_giftCardFactory;
+    protected $_messageManager;
+    protected $session;
+    protected $_checkoutSession;
+
+    public function __construct(
+        \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Session\SessionManagerInterface $session,
+        \Magento\Checkout\Model\Session $_checkoutSession
+    )
+    {
+        $this->session = $session;
+        $this->_checkoutSession = $_checkoutSession;
+        $this->_giftCardFactory = $giftCardFactory;
+        $this->_messageManager = $messageManager;
+        parent::__construct($context);
+    }
+
+
+    public function aroundExecute(\Magento\Checkout\Controller\Cart\CouponPost $subject, callable $proceed)
+    {
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($writer);
+        $code = $subject->getRequest()->getParam('coupon_code');
+        $code = trim($code);
+        $cartData = $this->_checkoutSession->getQuote();
+
+        //if have giftcard sesion run code , if have no, skip this code
+        if ($subject->getRequest()->getParam('remove') == 1 && $this->getValue() == 'giftcard') {
+            $this->messageManager->addSuccessMessage(
+                __('You canceled GiftCard .')
+            );
+            $dataQuote = [
+                'entity_id' => $this->_checkoutSession->getQuote()->getData('entity_id'),
+                'giftcard_code' => '',
+                'giftcard_base_discount' => '',
+                'giftcard_discount' => ''
+            ];
+            $cartData->setData($dataQuote)->save();
+
+            $this->unSetValue();
+            return $this->returnResult('*/*/index');
+        }
+
+
+        // get code giftcard and return code_gift
+        $giftcard = $this->_giftCardFactory->create();
+        $colection = $giftcard->getCollection();
+        $colection->addFilter('code', $code);
+        //insert data to  quote
+
+        $data = $colection->getData();
+        if ($data) {
+            //   $logger->info(json_encode($data));
+            $this->setValue('giftcard');
+            $escaper = $this->_objectManager->get(\Magento\Framework\Escaper::class);
+            $this->messageManager->addSuccessMessage(
+                __(
+                    'You used GiftCard code "%1".',
+                    $escaper->escapeHtml($code)
+                )
+            );
+
+            $dataQuote = [
+                'entity_id' => $this->_checkoutSession->getQuote()->getData('entity_id'),
+                'giftcard_code' => $code,
+                'giftcard_base_discount' => $data[0]['balance'],
+                'giftcard_discount' => $data[0]['balance']
+            ];
+            $cartData->setData($dataQuote)->save();
+
+            return $this->returnResult('*/*/index', ['gift_code' => $code]);
+        } else {
+
+            return $proceed();
+        }
+    }
+
+    function afterGetCouponCode(\Magento\Checkout\Block\Cart\Coupon $coupon, $result)
+    {
+//        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
+//        $logger = new \Zend\Log\Logger();
+//        $logger->addWriter($writer);
+        //  $logger->info(json_encode($this->getRequest()->getParams()));
+        $giftCode = $this->getRequest()->getParam('gift_code');
+        if ($giftCode) {
+            return $giftCode;
+        } else {
+            return $result;
+        }
+    }
+
+// this code below for set sesion giftcard value
+    public function setValue($value)
+    {
+        $this->session->setAbc($value);
+
+    }
+
+    public function getValue()
+    {
+        // $this->session->start();
+        return $this->session->getAbc();
+    }
+
+    public function unSetValue()
+    {
+        //  $this->session->start();
+        return $this->session->unsAbc();
+    }
+
+//. end code for set sesion giftcard value
+    private function returnResult($path = '', array $params = [])
+    {
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
+    }
+
+
+    public function execute()
+    {
+        // TODO: Implement execute() method.
+    }
+}

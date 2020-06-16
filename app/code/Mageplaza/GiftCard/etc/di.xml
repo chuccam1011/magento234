@@ -1,0 +1,21 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="mageplaza_giftcard_code_listing_data_source" xsi:type="string">Mageplaza\GiftCard\Model\ResourceModel\GiftCard\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Mageplaza\GiftCard\Model\ResourceModel\GiftCard\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mageplaza_giftcard_code</argument>
+            <argument name="resourceModel" xsi:type="string">Mageplaza\GiftCard\Model\ResourceModel\GiftCard</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Checkout\Controller\Cart\CouponPost">
+        <plugin name="MagePlaza_GiftCard::applyGiftCard" type="MagePlaza\GiftCard\Plugin\ApplyGiftCard" />
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Coupon">
+        <plugin name="MagePlaza_GiftCard::applyGiftCard" type="MagePlaza\GiftCard\Plugin\ApplyGiftCard" />
+    </type>
+</config>

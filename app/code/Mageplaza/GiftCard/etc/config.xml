@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <gittcard>
+            <general>
+                <enableGiftCard>1</enableGiftCard>
+                <enableUsedCheckOut>1</enableUsedCheckOut>
+                <enableRedem>1</enableRedem>
+            </general>
+            <code>
+                <codelength>32</codelength>
+            </code>
+        </gittcard>
+    </default>
+</config>
