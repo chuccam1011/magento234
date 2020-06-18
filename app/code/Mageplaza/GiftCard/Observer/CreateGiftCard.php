@@ -3,7 +3,6 @@
 
 namespace Mageplaza\GiftCard\Observer;
 
-use Psr\Log\LoggerInterface;
 
 class CreateGiftCard implements \Magento\Framework\Event\ObserverInterface
 {
@@ -13,22 +12,19 @@ class CreateGiftCard implements \Magento\Framework\Event\ObserverInterface
     protected $helperData;
 
     public function __construct(
-        LoggerInterface $logger,
         \Mageplaza\GiftCard\Model\HistoryFactory $historyFactory,
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
         \Mageplaza\GiftCard\Helper\DataCodeLength $helperData
 
     )
     {
-        $this->logger = $logger;
         $this->helperData = $helperData;
         $this->_historyFactory = $historyFactory;
         $this->_giftCardFactory = $giftCardFactory;
 
     }
 
-    public
-    function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         try {
             $order = $observer->getEvent()->getOrder();
@@ -38,9 +34,10 @@ class CreateGiftCard implements \Magento\Framework\Event\ObserverInterface
             $logger = new \Zend\Log\Logger();
             $logger->addWriter($writer);
             $logger->info("________");
-            // $logger->info($this->helperData->getGeneralConfig('codelength'));
-            //    $logger->info($order->getCustomerId());
+            $logger->info($this->helperData->getGeneralConfig('codelength'));
+            $logger->info($order->getCustomerId());
             $logger->info($incrementId);
+
             if ($incrementId) {
 
                 //create gift card

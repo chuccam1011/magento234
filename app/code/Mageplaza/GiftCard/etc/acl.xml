@@ -5,6 +5,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Mageplaza_GiftCard::giftcard" title="Gift Card" sortOrder="51">
                     <resource id="Mageplaza_GiftCard::code" title="Manage Code" sortOrder="10"/>
+                    <resource id="Mageplaza_GiftCard::giftcard_configuration" title="Configuration" sortOrder="11"/>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">

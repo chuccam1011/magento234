@@ -20,8 +20,6 @@ class Save extends Action
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         LayoutFactory $layoutFactory
-
-
     )
     {
         $this->_giftCardFactory = $giftCardFactory->create();
@@ -35,7 +33,8 @@ class Save extends Action
         $this->_giftCardRequest = $this->getRequest()->getParams();
         //$idGiftCard = $this->_giftCardFactory->getId();can not get Id
    //     print_r($this->_giftCardRequest);
-        //blac is deferent betwen save and sava pim ary
+
+        //black is deferent betwen save and save pimary
         if (isset($this->_giftCardRequest['back']) && $this->_giftCardRequest['balance'] != null) {
             if (isset($this->_giftCardRequest['code'])) {
                 $data = [
@@ -45,7 +44,7 @@ class Save extends Action
                 $this->_giftCardFactory->load($this->_giftCardRequest['giftcard_id']);
                 if ($this->_giftCardFactory->getData('giftcard_id')) {
                     $this->_giftCardFactory->setData($data)->save();
-                    $this->messageManager->addSuccess(__("GiftCard Gift Card Susses"));
+                    $this->messageManager->addSuccess(__("Edit GiftCard Gift Card Susses"));
                     return $this->returnResult('*/*/edit', [
                         'code' => $this->_giftCardFactory->getData('code'),
                         'balance' => $this->_giftCardFactory->getData('balance'),
@@ -75,7 +74,6 @@ class Save extends Action
 
             }
 
-
         } else {
             if (isset($this->_giftCardRequest['code'])) {
                 $data = [
@@ -86,7 +84,7 @@ class Save extends Action
                 if ($this->_giftCardFactory->getData('giftcard_id')) {
                     $this->_giftCardFactory->setData($data)->save();
                     //echo 'a';
-                    $this->messageManager->addSuccess(__("GiftCard Gift Card Susses"));
+                    $this->messageManager->addSuccess(__("Edit GiftCard Gift Card Susses"));
                     return $this->returnResult('*/*/index', [], ['error' => false]);
 
                 }

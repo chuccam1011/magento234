@@ -6,8 +6,9 @@ namespace Mageplaza\GiftCard\Controller\Adminhtml\Code;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Mageplaza\GiftCard\Controller\Adminhtml\GiftCard;
 
-class Edit extends Action implements HttpGetActionInterface
+class Edit extends GiftCard implements HttpGetActionInterface
 
 {
     protected $resultPageFactory = false;

@@ -42,12 +42,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             'data_attribute',
             ['mage-init' => ['button' => ['event' => 'save', 'target' => '#edit_form']]]
         );
-        $coderequest= $this->getRequest()->getParams();
-        if (isset($coderequest['code']) && $coderequest['code']!=''){
+        $coderequest = $this->getRequest()->getParams();
+        if (isset($coderequest['code']) && $coderequest['code'] != '') {
             $this->buttonList->update('delete', 'label', __('Delete GiftCard'));
 
         }
     }
+
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
         if ($this->getRequest()->getParam('popup')) {

@@ -35,6 +35,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
+        $this->checkIssetCustomer($this->_customerSession->getCustomerId());
         $this->_view->loadLayout();
         $this->_view->renderLayout();
         if ($this->helperData->getGeneralConfig('enableGiftCard') == 0) {
@@ -58,7 +59,8 @@ class Index extends \Magento\Framework\App\Action\Action
                 $valueBalance = $giftcard->getData('amount_used') + $data[0]['balance'];
                 $dataSet = [
                     'giftcard_id' => $data[0]['giftcard_id'],
-                    'amount_used' => $valueBalance
+                    'amount_used' => $valueBalance,
+                    'balance' => 0
                 ];
                 $giftcard->setData($dataSet)->save();
 
@@ -74,6 +76,7 @@ class Index extends \Magento\Framework\App\Action\Action
                 //add sub balance to banlance table
                 $balance->load($this->_customerSession->getCustomerId());
                 $balanceValue = $balance->getData('balance') + $data[0]['balance'];
+                $this->checkIssetCustomer($this->_customerSession->getCustomerId());
                 $dataBalance = [
                     'customer_id' => $this->_customerSession->getCustomerId(),
                     'balance' => $balanceValue
@@ -96,6 +99,24 @@ class Index extends \Magento\Framework\App\Action\Action
 
             }
         }
+    }
+
+    function checkIssetCustomer($idCustomer)
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of Object Manager
+        $tableName = 'giftcard_customer_balance';
+        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+        $connection = $resource->getConnection();
+
+        //Select Data from table
+        $sql = "Select 	balance FROM " . $tableName . ' WHERE customer_id = ' . $idCustomer;
+        $result = $connection->fetchAll($sql); // gives associated array, table fields as key in array.
+        //    print_r($result);
+        if (!$result) {
+            $sql = "INSERT INTO " . $tableName . "(`customer_id`, `balance`) VALUES " . "(" . $idCustomer . ",NULL )";
+            $connection->query($sql);
+        }
+
     }
 
 }

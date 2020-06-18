@@ -13,9 +13,9 @@
         </arguments>
     </virtualType>
     <type name="Magento\Checkout\Controller\Cart\CouponPost">
-        <plugin name="MagePlaza_GiftCard::applyGiftCard" type="MagePlaza\GiftCard\Plugin\ApplyGiftCard" />
+        <plugin name="MagePlaza_GiftCard::applyGiftCard" type="MagePlaza\GiftCard\Plugin\ApplyGiftCard"/>
     </type>
     <type name="Magento\Checkout\Block\Cart\Coupon">
-        <plugin name="MagePlaza_GiftCard::applyGiftCard" type="MagePlaza\GiftCard\Plugin\ApplyGiftCard" />
+        <plugin name="MagePlaza_GiftCard::applyGiftCode" type="MagePlaza\GiftCard\Plugin\ApplyGiftCard"/>
     </type>
 </config>

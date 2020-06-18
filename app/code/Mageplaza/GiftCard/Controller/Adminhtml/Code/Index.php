@@ -4,9 +4,9 @@
 namespace Mageplaza\GiftCard\Controller\Adminhtml\Code;
 
 
-use Magento\Backend\App\Action;
+use Mageplaza\GiftCard\Controller\Adminhtml\GiftCard;
 
-class Index extends Action
+class Index extends GiftCard
 
 {
     protected $resultPageFactory = false;

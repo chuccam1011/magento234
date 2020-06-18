@@ -32,12 +32,15 @@ class ApplyGiftCard extends Action
 
     public function aroundExecute(\Magento\Checkout\Controller\Cart\CouponPost $subject, callable $proceed)
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
+//        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
+//        $logger = new \Zend\Log\Logger();
+//        $logger->addWriter($writer);
+//        $logger->info( $subject->getRequest()->getParam('coupon_code'));
+
         $code = $subject->getRequest()->getParam('coupon_code');
         $code = trim($code);
         $cartData = $this->_checkoutSession->getQuote();
+
 
         //if have giftcard sesion run code , if have no, skip this code
         if ($subject->getRequest()->getParam('remove') == 1 && $this->getValue() == 'giftcard') {

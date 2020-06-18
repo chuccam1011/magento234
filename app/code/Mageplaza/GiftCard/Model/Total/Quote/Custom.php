@@ -9,21 +9,16 @@ class Custom extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $_priceCurrency;
-    protected $_giftCardFactory;
-    protected $_checkoutSession;
 
     /**
      * Custom constructor.
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Checkout\Model\Session $_checkoutSession
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     )
     {
-        $this->_checkoutSession = $_checkoutSession;
         $this->_priceCurrency = $priceCurrency;
-
     }
 
     /**
@@ -39,8 +34,9 @@ class Custom extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     )
     {
         parent::collect($quote, $shippingAssignment, $total);
-        $baseDiscount = $this->getCustomDiscount();
-        $discount = $this->_priceCurrency->convert($this->getCustomDiscount());
+        //  $quote->getData('giftcard_base_discount');
+        $baseDiscount = $quote->getData('giftcard_base_discount');
+        $discount = $this->_priceCurrency->convert($baseDiscount);
         $total->addTotalAmount('customdiscount', -$discount);
         $total->addBaseTotalAmount('customdiscount', -$baseDiscount);
         $total->setBaseGrandTotal($total->getBaseGrandTotal() - $baseDiscount);
@@ -50,11 +46,10 @@ class Custom extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-
         return [
             'code' => 'custom_discount',
             'title' => $this->getLabel(),
-            'value' => $this->getCustomDiscount(),
+            'value' => $quote->getData('giftcard_base_discount')
         ];
     }
 
@@ -63,11 +58,4 @@ class Custom extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         return __('Custom Discount');
     }
 
-    public function getCustomDiscount()
-    {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        return $this->_checkoutSession->getQuote()->getData('giftcard_base_discount');
-    }
 }
