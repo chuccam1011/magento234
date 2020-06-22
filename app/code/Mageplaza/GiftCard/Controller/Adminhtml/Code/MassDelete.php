@@ -3,6 +3,7 @@
 
 namespace Mageplaza\GiftCard\Controller\Adminhtml\Code;
 
+use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
@@ -28,10 +29,11 @@ class MassDelete extends \Magento\Backend\App\Action
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {
-        parent::__construct($context, $filter);
+        parent::__construct($context);
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
     }
+
     /**
      * Execute action
      *

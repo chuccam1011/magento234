@@ -48,7 +48,7 @@ define([
             it('check on success response with invalid response data', function () {
                 var messageContainer = jasmine.createSpyObj('globalMessageList', ['addErrorMessage']),
                     messageObject = {
-                        message: 'Something went wrong with your request. Please try again later.'
+                        message: '.'
                     };
 
                 model.process({

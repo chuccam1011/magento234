@@ -5,7 +5,7 @@
  */
 
 /**
- * Dashboard admin controller
+ * GiftCard admin controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

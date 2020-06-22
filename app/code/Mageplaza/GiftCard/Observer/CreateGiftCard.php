@@ -28,15 +28,14 @@ class CreateGiftCard implements \Magento\Framework\Event\ObserverInterface
     {
         try {
             $order = $observer->getEvent()->getOrder();
+            $quote = $observer->getEvent()->getQuote();
             $incrementId = $order->getIncrementId();
 
             $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
             $logger = new \Zend\Log\Logger();
             $logger->addWriter($writer);
             $logger->info("________");
-            $logger->info($this->helperData->getGeneralConfig('codelength'));
-            $logger->info($order->getCustomerId());
-            $logger->info($incrementId);
+            $logger->info(json_encode($quote->getItemsCollection()->getData()));
 
             if ($incrementId) {
 
@@ -86,7 +85,6 @@ class CreateGiftCard implements \Magento\Framework\Event\ObserverInterface
     {
         $characters = 'ABCDEFGHIJKLMLOPQRSTUVXYZ0123456789';
         $randomString = '';
-
         for ($i = 0; $i < $n; $i++) {
             $index = rand(0, strlen($characters) - 1);
             $randomString .= $characters[$index];

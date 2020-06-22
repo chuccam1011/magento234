@@ -10,8 +10,6 @@ class Create extends  Action
 
 {
     protected $resultPageFactory = false;
-    protected $_resultForwardFactory = false;
-
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory

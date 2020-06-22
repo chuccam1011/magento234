@@ -21,8 +21,6 @@ class GiftCard extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
         \Mageplaza\GiftCard\Helper\Data $helperData
-
-
     )
     {
         $this->_historyFactory = $historyFactory;
@@ -30,7 +28,6 @@ class GiftCard extends \Magento\Framework\View\Element\Template
         $this->_balanceFactory = $balanceFactory;
         $this->_timezone = $timezone;
         $this->helperData = $helperData;
-        $this->getFormData();
         parent::__construct($context);
     }
 
@@ -42,6 +39,7 @@ class GiftCard extends \Magento\Framework\View\Element\Template
 
         $collection = $history->getCollection();
         $collection->addFilter('customer_id', $idCus);
+        $collection->setOrder('action_time','DESC');
         return $collection;
 
     }
@@ -58,18 +56,12 @@ class GiftCard extends \Magento\Framework\View\Element\Template
         return $curenHelper->currency($curren, true, false);
     }
 
-    protected function getFormData()
-    {
-        //  $data = $this->getRequest()->getParams('ad');
-        //   if($data) return $data;
-    }
-
-
     function getRedemStatus()
     {
         return $this->helperData->getGeneralConfig('enableRedem');
 
     }
+
     function getGiftcardStatus()
     {
         return $this->helperData->getGeneralConfig('enableGiftCard');
@@ -81,7 +73,8 @@ class GiftCard extends \Magento\Framework\View\Element\Template
         $balance = $this->_balanceFactory->create();
         $balance->load($this->customerSession->getCustomerId());
         $balance = $balance->getData();
-       if ($balance) return $this->formatCurency($balance['balance']) ; else return 'You have no balance';
+        if ($balance) return $this->formatCurency($balance['balance']);
+        else return 'You have no balance';
     }
 
 

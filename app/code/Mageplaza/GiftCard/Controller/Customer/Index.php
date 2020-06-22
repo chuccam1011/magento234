@@ -35,12 +35,14 @@ class Index extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-        $this->checkIssetCustomer($this->_customerSession->getCustomerId());
+        $idCus = $this->_customerSession->getCustomerId();
+        if (!$idCus) {
+            $this->_redirect('customer/account/login/');
+        }
         $this->_view->loadLayout();
         $this->_view->renderLayout();
-        if ($this->helperData->getGeneralConfig('enableGiftCard') == 0) {
-            $this->_redirect('customer/account/');
-        };
+        $this->checkIssetCustomer($this->_customerSession->getCustomerId());
+
 
 
         $dataRequest = $this->getRequest()->getParams();
@@ -82,6 +84,7 @@ class Index extends \Magento\Framework\App\Action\Action
                     'balance' => $balanceValue
                 ];
                 $balance->setData($dataBalance)->save();
+
                 //show alert
                 $datareuslt = $this->getRequest()->getParams();
                 $alert = 'Your Code has been apply :  ' . $datareuslt['code'];

@@ -52,7 +52,6 @@ $giftcard_hiss = $block->getHistoryCollection();
                         class="col total"><?= $block->formatCurency($giftcard_his['amount']) ?></td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Action')) ?>"
                         class="col actions"><?= $giftcard_his['action'] ?></td>
-
                 </tr>
             <?php endforeach; ?>
             </tbody>

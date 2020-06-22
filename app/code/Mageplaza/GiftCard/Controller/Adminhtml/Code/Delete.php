@@ -23,7 +23,7 @@ class Delete extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('giftcard_id');
-        echo $id;
+     //   echo $id;
         $resultRedirect = $this->resultRedirectFactory->create();
         $this->_giftCardFactory->load($id);
         try {

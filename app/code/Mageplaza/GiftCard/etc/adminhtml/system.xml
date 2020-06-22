@@ -8,31 +8,34 @@
             <class>separator-top</class>
             <label>Gift Card</label>
             <tab>mageplaza</tab>
-            <resource>Mageplaza_GiftCard::gitfcard_config</resource>
-            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <resource>Mageplaza_GiftCard::giftcard_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General Configuration</label>
-                <field id="enableGiftCard" translate="label" type="select" sortOrder="1" canRestore="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enableGiftCard" translate="label" type="select" sortOrder="1" canRestore="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Gift Card</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Enable giftcard ?</comment>
                 </field>
-                <field id="enableUsedCheckOut" translate="label" type="select" sortOrder="2" canRestore="1" showInDefault="1" showInWebsite="0" showInStore="0">
+
+                <field id="giftcard/general/enableUsedCheckOut" translate="label" type="select" sortOrder="2" canRestore="1" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Allow used Gift Card at Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Allow customer use gift code in checkout page ? </comment>
+                    <comment>Allow customer use gift code in checkout page ?</comment>
                 </field>
-                <field id="enableRedem" translate="label" type="select" sortOrder="3"  canRestore="1" showInDefault="1" showInWebsite="0" showInStore="0">
+
+
+                <field id="giftcard/general/enableRedem" translate="label" type="select" sortOrder="3" canRestore="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Redeem Gift Card</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Allow customer sent amount of gift code  into balance ?</comment>
+                    <comment>Allow customer sent amount of gift code into balance ?</comment>
                 </field>
             </group>
-            <group id="code" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="code" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Code Configuration</label>
-                <field id="codelength" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Code Length </label>
+                <field id="codelength" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Code Length</label>
                     <validate>validate-number</validate>
-                    <comment>Enter Number ? </comment>
+                    <comment>Enter Number ?</comment>
                 </field>
             </group>
         </section>

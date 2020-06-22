@@ -13,16 +13,20 @@ class ApplyGiftCard extends Action
     protected $_messageManager;
     protected $session;
     protected $_checkoutSession;
+    protected $helperData;//get config in Admin
 
     public function __construct(
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Session\SessionManagerInterface $session,
-        \Magento\Checkout\Model\Session $_checkoutSession
+        \Magento\Checkout\Model\Session $_checkoutSession,
+        \Mageplaza\GiftCard\Helper\Data $helperData
+
     )
     {
         $this->session = $session;
+        $this->helperData = $helperData;
         $this->_checkoutSession = $_checkoutSession;
         $this->_giftCardFactory = $giftCardFactory;
         $this->_messageManager = $messageManager;
@@ -32,10 +36,11 @@ class ApplyGiftCard extends Action
 
     public function aroundExecute(\Magento\Checkout\Controller\Cart\CouponPost $subject, callable $proceed)
     {
-//        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-//        $logger = new \Zend\Log\Logger();
-//        $logger->addWriter($writer);
-//        $logger->info( $subject->getRequest()->getParam('coupon_code'));
+
+        if ($this->helperData->getGeneralConfig('enableGiftCard') == 0 ||
+            $this->helperData->getGeneralConfig('enableUsedCheckOut') == 0) {
+            return $proceed();
+        }
 
         $code = $subject->getRequest()->getParam('coupon_code');
         $code = trim($code);
@@ -88,7 +93,6 @@ class ApplyGiftCard extends Action
 
             return $this->returnResult('*/*/index', ['gift_code' => $code]);
         } else {
-
             return $proceed();
         }
     }
