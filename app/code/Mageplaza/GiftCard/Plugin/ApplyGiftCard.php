@@ -44,7 +44,7 @@ class ApplyGiftCard extends Action
 
         $code = $subject->getRequest()->getParam('coupon_code');
         $code = trim($code);
-        $cartData = $this->_checkoutSession->getQuote();
+        $quote = $this->_checkoutSession->getQuote();
 
 
         //if have giftcard sesion run code , if have no, skip this code
@@ -58,7 +58,7 @@ class ApplyGiftCard extends Action
                 'giftcard_base_discount' => '',
                 'giftcard_discount' => ''
             ];
-            $cartData->setData($dataQuote)->save();
+            $quote->setData($dataQuote)->save();
 
             $this->unSetValue();
             return $this->returnResult('*/*/index');
@@ -69,8 +69,8 @@ class ApplyGiftCard extends Action
         $giftcard = $this->_giftCardFactory->create();
         $colection = $giftcard->getCollection();
         $colection->addFilter('code', $code);
-        //insert data to  quote
 
+        //insert data to  quote
         $data = $colection->getData();
         if ($data) {
             //   $logger->info(json_encode($data));
@@ -82,14 +82,18 @@ class ApplyGiftCard extends Action
                     $escaper->escapeHtml($code)
                 )
             );
-
+            if ($data[0]['balance'] > $quote->getBaseGrandTotal()) {
+                $discount = $quote->getBaseGrandTotal();
+            } else {
+                $discount = $data[0]['balance'];
+            }
             $dataQuote = [
                 'entity_id' => $this->_checkoutSession->getQuote()->getData('entity_id'),
                 'giftcard_code' => $code,
-                'giftcard_base_discount' => $data[0]['balance'],
-                'giftcard_discount' => $data[0]['balance']
+                'giftcard_base_discount' => $discount,
+                'giftcard_discount' => $discount
             ];
-            $cartData->setData($dataQuote)->save();
+            $quote->setData($dataQuote)->save();
 
             return $this->returnResult('*/*/index', ['gift_code' => $code]);
         } else {
@@ -99,14 +103,21 @@ class ApplyGiftCard extends Action
 
     function afterGetCouponCode(\Magento\Checkout\Block\Cart\Coupon $coupon, $result)
     {
-//        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-//        $logger = new \Zend\Log\Logger();
-//        $logger->addWriter($writer);
-        //  $logger->info(json_encode($this->getRequest()->getParams()));
+
+        if ($this->helperData->getGeneralConfig('enableGiftCard') == 0 ||
+            $this->helperData->getGeneralConfig('enableUsedCheckOut') == 0) {
+            return $result;
+        }
+
         $giftCode = $this->getRequest()->getParam('gift_code');
         if ($giftCode) {
             return $giftCode;
+
         } else {
+            $giftCode = $this->_checkoutSession->getQuote()->getGiftcardCode();//check in quote if param null
+            if ($giftCode) {
+                return $giftCode;
+            }
             return $result;
         }
     }

@@ -13,7 +13,6 @@ class Delete extends Action
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory
-
     )
     {
         $this->_giftCardFactory = $giftCardFactory->create();
@@ -23,19 +22,18 @@ class Delete extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('giftcard_id');
-     //   echo $id;
         $resultRedirect = $this->resultRedirectFactory->create();
         $this->_giftCardFactory->load($id);
         try {
             $this->_giftCardFactory->delete();
-            $this->messageManager->addSuccessMessage(__('Succes Delete Gift Card '));
+            $this->messageManager->addSuccessMessage(__('Success Delete Gift Card '));
             return $resultRedirect->setPath('*/*/index');
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             return $resultRedirect->setPath(
                 '*/*/edit',
-                ['attribute_id' => $id]
-                );
+                ['giftcard_id' => $id]
+            );
         }
 
     }

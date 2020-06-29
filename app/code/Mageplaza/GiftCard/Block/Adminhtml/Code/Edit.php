@@ -27,7 +27,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->addButton(
             'save_and_edit_button',
             [
-                'label' => __('Save and Continue GiftCard'),
+                'label' => __('Save and Continue Edit'),
                 'class' => 'save',
                 'data_attribute' => [
                     'mage-init' => [

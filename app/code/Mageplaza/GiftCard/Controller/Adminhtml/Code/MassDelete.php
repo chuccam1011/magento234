@@ -3,9 +3,8 @@
 
 namespace Mageplaza\GiftCard\Controller\Adminhtml\Code;
 
-use Magento\Backend\App\Action;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Mageplaza\GiftCard\Model\ResourceModel\GiftCard\CollectionFactory;
 
@@ -52,7 +51,7 @@ class MassDelete extends \Magento\Backend\App\Action
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath('*/*/');
+        return $resultRedirect->setPath('*/*/index');
 
     }
 }

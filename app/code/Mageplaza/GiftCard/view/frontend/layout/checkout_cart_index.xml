@@ -11,7 +11,7 @@
                                     <item name="component" xsi:type="string">Mageplaza_GiftCard/js/view/checkout/summary/customdiscount</item>
                                     <item name="sortOrder" xsi:type="string">20</item>
                                     <item name="config" xsi:type="array">
-                                        <item name="custom_discount" xsi:type="string" translate="true">Custom Discount</item>
+                                        <item name="custom_discount" xsi:type="string" translate="true">Gift Card</item>
                                     </item>
                                 </item>
                             </item>

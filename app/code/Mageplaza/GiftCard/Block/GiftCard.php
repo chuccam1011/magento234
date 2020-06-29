@@ -3,6 +3,9 @@
 
 namespace Mageplaza\GiftCard\Block;
 
+/*
+ * *  Use this for giftcard history
+ */
 
 class GiftCard extends \Magento\Framework\View\Element\Template
 {
@@ -36,10 +39,9 @@ class GiftCard extends \Magento\Framework\View\Element\Template
 //        $this->_historyFactory->jionGetCode();
         $idCus = $this->customerSession->getCustomerId();
         $history = $this->_historyFactory->create();
-
         $collection = $history->getCollection();
         $collection->addFilter('customer_id', $idCus);
-        $collection->setOrder('action_time','DESC');
+        $collection->setOrder('action_time', 'DESC');
         return $collection;
 
     }

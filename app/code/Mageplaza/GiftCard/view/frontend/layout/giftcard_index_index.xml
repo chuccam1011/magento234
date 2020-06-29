@@ -5,4 +5,3 @@
         <block   class="Mageplaza\GiftCard\Block\Test" name="giftcard_index_addGiftCard" template="Mageplaza_GiftCard::add.phtml" />
     </referenceContainer>
 </page>
-<!--    class="Mageplaza\GiftCard\Block\test"-->

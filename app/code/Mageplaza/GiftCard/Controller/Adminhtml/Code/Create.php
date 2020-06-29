@@ -6,10 +6,12 @@ namespace Mageplaza\GiftCard\Controller\Adminhtml\Code;
 
 use Magento\Backend\App\Action;
 
-class Create extends  Action
+class Create extends Action
 
 {
-    protected $resultPageFactory = false;
+
+    protected $resultPageFactory;
+
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -21,10 +23,7 @@ class Create extends  Action
 
     public function execute()
     {
-        $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend((__('Creat Gift Card')));
         $this->_forward('edit');
-        return $resultPage;
     }
 
 }

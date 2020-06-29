@@ -159,6 +159,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'length' => '12,4',
                         'comment' => 'Amount has been discount from apply GiftCard in Cart',
                     ]
+
                 );
 
             }

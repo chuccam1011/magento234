@@ -13,6 +13,8 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $_customerFactory;
     protected $_balanceFactory;
     protected $_giftCardFactory;
+    protected $_pageFactory;
+
     protected $helperData;//get config in Admin
 
     public function __construct(
@@ -21,7 +23,9 @@ class Index extends \Magento\Framework\App\Action\Action
         \Mageplaza\GiftCard\Model\BalanceFactory $balanceFactory,
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Mageplaza\GiftCard\Helper\Data $helperData
+        \Mageplaza\GiftCard\Helper\Data $helperData,
+        \Magento\Framework\View\Result\PageFactory $pageFactory
+
 
     )
     {
@@ -30,6 +34,7 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->_balanceFactory = $balanceFactory;
         $this->_giftCardFactory = $giftCardFactory;
         $this->helperData = $helperData;
+        $this->_pageFactory = $pageFactory;
         parent::__construct($context);
     }
 
@@ -39,46 +44,45 @@ class Index extends \Magento\Framework\App\Action\Action
         if (!$idCus) {
             $this->_redirect('customer/account/login/');
         }
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
-        $this->checkIssetCustomer($this->_customerSession->getCustomerId());
-
-
-
+        if ($this->helperData->getGeneralConfig('enableGiftCard') == 0) {
+            $this->_redirect('customer/account/index');
+        }
+//        $this->_view->loadLayout();
+//        $this->_view->renderLayout();
+        $this->checkIssetCustomer($idCus);
         $dataRequest = $this->getRequest()->getParams();
         $history = $this->_historyFactory->create();
         $balance = $this->_balanceFactory->create();
         $giftcard = $this->_giftCardFactory->create();
-        // echo $data['code'];
         $colectionGift = $giftcard->getCollection();
-        if ($dataRequest) {
-            $colectionGift->addFilter('code', $dataRequest['code']);
+
+        if ($dataRequest && $this->helperData->getGeneralConfig('enableRedem') != 0) {
+            $colectionGift->addFilter('code', $dataRequest['code'])->getFirstItem();
             $data = $colectionGift->getData();
-            if ($colectionGift && isset($data[0]['balance']) && $data[0]['balance'] > 0) {//balance must be lager than 0
+            $data = $data[0];
+            if ($colectionGift && isset($data['balance']) && $data['balance'] > $data['amount_used']) {
 
                 //add data to gift card table
-                $giftcard->load($data[0]['giftcard_id']);
-                $valueBalance = $giftcard->getData('amount_used') + $data[0]['balance'];
+                $giftcard->load($data['giftcard_id']);
+                $valueBalance = $giftcard->getData('amount_used') + $data['balance'];
                 $dataSet = [
-                    'giftcard_id' => $data[0]['giftcard_id'],
-                    'amount_used' => $valueBalance,
-                    'balance' => 0
+                    'giftcard_id' => $data['giftcard_id'],
+                    'amount_used' => $valueBalance
                 ];
                 $giftcard->setData($dataSet)->save();
 
                 //add data to history table
                 $dataHistory = [
                     'customer_id' => $this->_customerSession->getCustomerId(),
-                    'giftcard_id' => $data[0]['giftcard_id'],
+                    'giftcard_id' => $data['giftcard_id'],
                     'action' => 'Redeem',
-                    'amount' => $data[0]['balance']
+                    'amount' => $data['balance']
                 ];
                 $history->addData($dataHistory)->save();
 
                 //add sub balance to banlance table
                 $balance->load($this->_customerSession->getCustomerId());
-                $balanceValue = $balance->getData('balance') + $data[0]['balance'];
-                $this->checkIssetCustomer($this->_customerSession->getCustomerId());
+                $balanceValue = $balance->getData('balance') + $data['balance'];
                 $dataBalance = [
                     'customer_id' => $this->_customerSession->getCustomerId(),
                     'balance' => $balanceValue
@@ -86,22 +90,24 @@ class Index extends \Magento\Framework\App\Action\Action
                 $balance->setData($dataBalance)->save();
 
                 //show alert
-                $datareuslt = $this->getRequest()->getParams();
-                $alert = 'Your Code has been apply :  ' . $datareuslt['code'];
+                $dataresult = $this->getRequest()->getParams();
+                $alert = 'Your Code has been apply :  ' . $dataresult['code'];
                 $this->messageManager->addSuccessMessage($alert);
             } else {
-                if ($data && $data[0]['balance'] <= 0) {
-                    $datareuslt = $this->getRequest()->getParams();
-                    $alert = 'Your Code have no value :  ' . $datareuslt['code'];
+                if ($data && $data['balance'] = $data['amount_used']) {
+                    $dataresult = $this->getRequest()->getParams();
+                    $alert = 'Your Code have no value :  ' . $dataresult['code'];
                     $this->messageManager->addErrorMessage($alert);
                 } else {
-                    $datareuslt = $this->getRequest()->getParams();
-                    $alert = 'Can not find your Code :  ' . $datareuslt['code'];
+                    $dataresult = $this->getRequest()->getParams();
+                    $alert = 'Can not find your Code :  ' . $dataresult['code'];
                     $this->messageManager->addErrorMessage($alert);
                 }
 
             }
         }
+        return $this->_pageFactory->create();
+
     }
 
     function checkIssetCustomer($idCustomer)

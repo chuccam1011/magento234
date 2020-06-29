@@ -15,7 +15,6 @@ class Actions extends Column
      * @var UrlInterface
      */
     protected $urlBuilder;
-
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
@@ -24,11 +23,13 @@ class Actions extends Column
      * @param array $data
      */
     public function __construct(
+
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
+
     )
     {
         $this->urlBuilder = $urlBuilder;
@@ -40,6 +41,7 @@ class Actions extends Column
      *
      * @param array $dataSource
      * @return array
+     * @throws \Zend_Currency_Exception
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -47,7 +49,6 @@ class Actions extends Column
             $storeId = $this->context->getFilterParam('store_id');
 
             foreach ($dataSource['data']['items'] as &$item) {
-
                 $str = $item['balance'];
                 $str = str_replace("$", "", $str);
                 $item[$this->getData('name')]['edit'] = [
@@ -55,10 +56,6 @@ class Actions extends Column
                         'mageplaza_giftcard/code/edit',
                         [
                             'giftcard_id' => $item['giftcard_id'],
-                            'store' => $storeId,
-                            'balance' => $str,
-                            'code' => $item['code'],
-                            'created_from' => $item['created_from']
                         ]
                     ),
                     'label' => __('Edit'),
@@ -67,8 +64,10 @@ class Actions extends Column
                 ];
 
             }
-        }
 
+        }
         return $dataSource;
     }
+
+
 }

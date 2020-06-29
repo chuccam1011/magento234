@@ -16,15 +16,12 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Enable giftcard ?</comment>
                 </field>
-
-                <field id="giftcard/general/enableUsedCheckOut" translate="label" type="select" sortOrder="2" canRestore="1" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="enableUsedCheckOut" translate="label" type="select" sortOrder="2" canRestore="1" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Allow used Gift Card at Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Allow customer use gift code in checkout page ?</comment>
                 </field>
-
-
-                <field id="giftcard/general/enableRedem" translate="label" type="select" sortOrder="3" canRestore="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enableRedem" translate="label" type="select" sortOrder="3" canRestore="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Redeem Gift Card</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Allow customer sent amount of gift code into balance ?</comment>

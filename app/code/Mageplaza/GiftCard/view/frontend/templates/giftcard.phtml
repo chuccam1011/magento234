@@ -1,5 +1,5 @@
 <?php
-// Add Some Code Here for design
+// teamplates for history giftcard
 ?>
 <legend class="legend"><span><?= $block->escapeHtml(__('GiftCard Information')) ?></span></legend><br>
 <fieldset class="fieldset ">
@@ -26,7 +26,6 @@
 <legend class="legend"><span><?= $block->escapeHtml(__('History')) ?></span></legend><br>
 <?php
 $giftcard_hiss = $block->getHistoryCollection();
-
 ?>
 
 <?php if ($giftcard_hiss && count($giftcard_hiss)) : ?>
@@ -47,7 +46,7 @@ $giftcard_hiss = $block->getHistoryCollection();
                     <td data-th="<?= $block->escapeHtmlAttr(__('Date')) ?>"
                         class="col date"><?= $block->format($giftcard_his['action_time']) ?></td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Code')) ?>"
-                        class="col"><?= $giftcard_his->getCode($giftcard_his['giftcard_id']); ?></td>
+                        class="col"><?= $giftcard_his->getCode($giftcard_his->getGiftcardId()); ?></td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Amount')) ?>"
                         class="col total"><?= $block->formatCurency($giftcard_his['amount']) ?></td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Action')) ?>"

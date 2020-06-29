@@ -15,6 +15,5 @@
                 </action>
             </block>
         </referenceContainer>
-        <block   class="Mageplaza\GiftCard\Block\Adminhtml\Code\Edit" name="giftcard_index_addGiftCard" template="Mageplaza_GiftCard::edit.phtml" />
     </body>
 </page>

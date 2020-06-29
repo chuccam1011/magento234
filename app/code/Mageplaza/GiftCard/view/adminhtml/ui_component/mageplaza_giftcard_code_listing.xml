@@ -40,7 +40,7 @@
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
         <filterSearch name="fulltext"/>
-        <filters name="listing_filters" />
+        <filters name="listing_filters"/>
         <paging name="listing_paging"/>
         <exportButton name="export_button"/>
 
@@ -101,13 +101,13 @@
                 </item>
             </argument>
         </column>
-        <column name="balance" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="balance" class="Mageplaza\GiftCard\Ui\Component\Listing\Column\Price">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">Balance</label>
             </settings>
         </column>
-        <column name="amount_used" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="amount_used" class="Mageplaza\GiftCard\Ui\Component\Listing\Column\Price">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">Amount Used</label>
@@ -131,7 +131,7 @@
                 <sorting>desc</sorting>
             </settings>
         </column>
-        <actionsColumn name="actions"  class="Mageplaza\GiftCard\Ui\Component\Listing\Column\Actions" >
+        <actionsColumn name="actions" class="Mageplaza\GiftCard\Ui\Component\Listing\Column\Actions">
             <settings>
                 <indexField>giftcard_id</indexField>
             </settings>

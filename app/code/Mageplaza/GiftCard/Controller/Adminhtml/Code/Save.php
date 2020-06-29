@@ -6,36 +6,35 @@ namespace Mageplaza\GiftCard\Controller\Adminhtml\Code;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\View\LayoutFactory;
 
 class Save extends Action
 {
     protected $_giftCardFactory;
     protected $_giftCardRequest;
     protected $_messageManager;
-    protected $layoutFactory;
+    protected $helperData;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Mageplaza\GiftCard\Model\GiftCardFactory $giftCardFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        LayoutFactory $layoutFactory
+        \Mageplaza\GiftCard\Helper\DataCodeLength $helperData
     )
     {
         $this->_giftCardFactory = $giftCardFactory->create();
         $this->_messageManager = $messageManager;
-        $this->layoutFactory = $layoutFactory;
+        $this->helperData = $helperData;
         parent::__construct($context);
     }
 
     public function execute()
     {
         $this->_giftCardRequest = $this->getRequest()->getParams();
-        //$idGiftCard = $this->_giftCardFactory->getId();can not get Id
-   //     print_r($this->_giftCardRequest);
 
-        //black is deferent betwen save and save pimary
+        //back is deferent betwen save and save pimary
+
         if (isset($this->_giftCardRequest['back']) && $this->_giftCardRequest['balance'] != null) {
+            // save and Continue edit not go index
             if (isset($this->_giftCardRequest['code'])) {
                 $data = [
                     'giftcard_id' => $this->_giftCardRequest['giftcard_id'],
@@ -46,11 +45,8 @@ class Save extends Action
                     $this->_giftCardFactory->setData($data)->save();
                     $this->messageManager->addSuccess(__("Edit GiftCard Gift Card Susses"));
                     return $this->returnResult('*/*/edit', [
-                        'code' => $this->_giftCardFactory->getData('code'),
-                        'balance' => $this->_giftCardFactory->getData('balance'),
-                        'created_from' => $this->_giftCardFactory->getData('created_from'),
-
-                    ], ['error' => false]);
+                        'giftcard_id' => $this->_giftCardRequest['giftcard_id']
+                    ]);
 
                 }
 
@@ -64,17 +60,15 @@ class Save extends Action
                 ];
                 $this->_giftCardFactory->addData($data)->save();
                 $giftcard_id = $this->_giftCardFactory->getId();
-                $this->messageManager->addSuccess(__("Contine GiftCard Gift Card"));
+                $this->messageManager->addSuccess(__("Continue Edit Gift Card"));
                 return $this->returnResult('*/*/edit', [
-                    'code' => $code,
-                    'balance' => $this->_giftCardRequest['balance'],
-                    'created_from' => 'admin',
                     'giftcard_id' => $giftcard_id
-                ], ['error' => false]);
+                ]);
 
             }
 
-        } else {
+        } else { // save primary and go index
+
             if (isset($this->_giftCardRequest['code'])) {
                 $data = [
                     'giftcard_id' => $this->_giftCardRequest['giftcard_id'],
@@ -85,7 +79,7 @@ class Save extends Action
                     $this->_giftCardFactory->setData($data)->save();
                     //echo 'a';
                     $this->messageManager->addSuccess(__("Edit GiftCard Gift Card Susses"));
-                    return $this->returnResult('*/*/index', [], ['error' => false]);
+                    return $this->returnResult('*/*/index', []);
 
                 }
 
@@ -102,7 +96,7 @@ class Save extends Action
                     $this->messageManager->addSuccess(__("Create Gift Card Success"));
                     // $giftcard_id = $this->_giftCardFactory->getId();
 
-                    return $this->returnResult('*/*/index', [], ['error' => false]);
+                    return $this->returnResult('*/*/index', []);
                 }
 
             }
@@ -113,6 +107,9 @@ class Save extends Action
 
     private function getCodeRandom($n)
     {
+        if (!is_numeric($n)) {
+            $n = $this->helperData->getGeneralConfig('codelength');
+        }
         $characters = 'ABCDEFGHIJKLMLOPQRSTUVXYZ0123456789';
         $randomString = '';
 
@@ -124,17 +121,9 @@ class Save extends Action
         return $randomString;
     }
 
-    private function returnResult($path = '', array $params = [], array $response = [])
+    private function returnResult($path = '', array $params = [])
     {
-//        if($this->isAjax()){
-//            $layout = $this->layoutFactory->create();
-//            $layout->initMessages();
-//            $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
-//            $response['params'] = $params;
-//            return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($response);
-//        }
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
     }
-
 }
 

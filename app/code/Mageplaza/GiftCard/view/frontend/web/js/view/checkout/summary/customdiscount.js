@@ -14,7 +14,7 @@ define(
 
 
             isDisplayedCustomdiscount: function () {
-                let isDisplay = window.checkoutConfig.totalsData.total_segments[2].value;
+                let isDisplay = window.checkoutConfig.totalsData.total_segments[1].value;
                 if (isDisplay > 0) {
                     return true;
                 } else return false;
@@ -22,8 +22,8 @@ define(
             },
 
             getCustomDiscount: function () {
-                let dis_count = window.checkoutConfig.totalsData.total_segments[2].value;
-                return this.getFormattedPrice(dis_count);
+                let dis_count = window.checkoutConfig.totalsData.total_segments[1].value;
+                return this.getFormattedPrice(-dis_count);
             }
         });
     }

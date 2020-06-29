@@ -5,7 +5,6 @@
     tr:nth-child(even) { background-color: #dddddd; }
     .post-id{width:2%} .post-name{ width:30%}
 </style>
-<?php //var_dump($block->getGiftCardCollection()); ?>
 <table>
     <tr>
         <th class="post-id">Id</th>
@@ -26,7 +25,7 @@
                      <td>'.$giftcard->getCreatedFrom().'</td>
                      <td>'.$giftcard->getCreateAt().'</td>
                      <td>  <a href='.'"'.'?del='.$giftcard->getGiftcardId().'"'.'>Delete</a>
-                             || <a href='.'"'.'?edit='.$giftcard->getGiftcardId().'&&balance=&&code="'.'>GiftCard</a>
+                             || <a href='.'"'.'?edit='.$giftcard->getGiftcardId().'&&balance="'.'>Edit</a>
                       </td>
                   </tr>';
     }
